@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irish Public Mapping Agencies GIS Viewer</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <h1>Irish Public Mapping Agencies GIS Viewer</h1>
+    <p>This web application provides an interactive GIS map that integrates publicly available mapping datasets from various Irish public agencies. Users can toggle different map layers to explore datasets from Ordnance Survey Ireland, the Environmental Protection Agency, the Geological Survey of Ireland, and the Office of Public Works.</p>
+    <div id="map" style="width: 100%; height: 100vh;"></div>
+    <script>
+        var map = L.map('map').setView([53.3498, -6.2603], 7);
+
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var osi = L.tileLayer.wms("https://maps.osi.ie/public/wms", {
+            layers: 'Ordnance_Survey_Ireland',
+            format: 'image/png',
+            transparent: true
+        });
+
+        var epa = L.tileLayer.wms("https://gis.epa.ie/geoserver/wms", {
+            layers: 'EPA:Air_Quality',
+            format: 'image/png',
+            transparent: true
+        });
+
+        var gsi = L.tileLayer.wms("https://gsw.geodata.gov.ie/geoserver/wms", {
+            layers: 'GSI:Geological_Map',
+            format: 'image/png',
+            transparent: true
+        });
+
+        var opw = L.tileLayer.wms("https://maps.opw.ie/geoserver/wms", {
+            layers: 'OPW:Flood_Risk',
+            format: 'image/png',
+            transparent: true
+        });
+
+        L.control.layers({ "OpenStreetMap": osm }, {
+            "Ordnance Survey Ireland": osi,
+            "EPA Air Quality": epa,
+            "Geological Survey Ireland": gsi,
+            "OPW Flood Maps": opw
+        }).addTo(map);
+    </script>
+</body>
+</html>
